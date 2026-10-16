@@ -1,0 +1,9 @@
+sku,description,category,quantity,unit_price
+SKU-001,Exercise book A4 200pg,Stationery,12,145.00
+SKU-002,Ballpoint pen blue (box of 50),Stationery,2,650.00
+SKU-003,USB flash drive 64GB,Electronics,3,1250.00
+SKU-004,Wireless mouse,Electronics,1,1899.50
+SKU-005,Drinking water 500ml (pack of 24),Groceries,4,720.00
+SKU-006,Instant coffee 200g,Groceries,2,895.00
+SKU-007,Printer paper A4 (ream),Stationery,5,780.00
+SKU-008,HDMI cable 2m,Electronics,2,549.99

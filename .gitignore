@@ -218,3 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Coding Agents lab: personal agent files that must not be committed
+CLAUDE.local.md
+.claude/settings.local.json

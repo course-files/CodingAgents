@@ -1,0 +1,28 @@
+---
+name: add-tests
+description: Write pytest tests for a function in sales_toolkit, covering normal cases, boundaries and invalid input, before any implementation change. Use when asked to add, extend or check tests.
+---
+
+<!--
+  Copy to .claude/skills/add-tests/SKILL.md (Step 10) and improve it.
+  The description above decides WHEN the agent loads this skill, so make
+  it specific. The body below decides HOW the agent does the work.
+-->
+
+# Adding tests to sales_toolkit
+
+When asked to add tests for a function:
+
+1. Read the function and its docstring. List the business rules it must obey.
+2. Before writing any test, write a short table in your reply:
+   | case | input | expected output | why this case matters |
+   Include at least: one normal case, one boundary (for example 0 or 100
+   percent), and one invalid input.
+3. Compute every expected value by hand from the business rules. Never
+   compute an expected value by calling the function under test.
+4. Put the tests in `tests/test_<module>.py`, one behaviour per test, with a
+   descriptive name such as `test_discount_of_100_percent_gives_zero`.
+5. Use `Decimal("...")` strings for money, never floats.
+6. Run `python -m pytest -q` and report exactly which tests pass and fail.
+7. Do NOT change code in `sales_toolkit/` in this task. If a test fails,
+   report it as a possible defect and stop.
