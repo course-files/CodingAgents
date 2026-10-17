@@ -26,6 +26,9 @@ Review the changes you are asked about and report, in this order:
    plausible-looking value such as 0.
 5. **Security and dependencies**: secrets in code, logging of secrets, new
    or unknown packages.
+6. **AI features** (from Step 24): API keys in code or logs; model output
+   used without validation; prices, discounts or totals taken from the model;
+   unit tests that call a real model instead of ScriptedClient.
 
 For each finding give: file and line, severity (blocker / should fix / minor),
 what is wrong, and a concrete fix. If you find nothing in a category, say so.

@@ -34,5 +34,14 @@ Money is in Kenya Shillings (KES).
 - After changing code, run the tests and report the result honestly,
   including failures.
 
+## AI features (add this section in Step 18)
+<!-- Examples of rules worth stating:
+- API keys live only in .env. Never print, log or commit them.
+- The model identifies products and quantities only. Prices, discounts and
+  totals are always calculated by our code from data/catalogue.csv.
+- Never trust model output: validate it as you would validate user input.
+- Unit tests must use ScriptedClient. They must never call a real model.
+-->
+
 ## Environment notes
 <!-- Example: most of the class uses Windows; keep LF line endings. -->

@@ -26,6 +26,23 @@ You can also use Claude Code with a **Claude Console** account, which is billed
 by usage (pay as you go) rather than by subscription. This suits occasional use
 but makes the cost harder to predict.
 
+## Part D: the Claude API is billed separately
+
+Part D asks your own program to call a model through its API. **A Claude Pro
+subscription does not include API usage**; the API is billed separately, per
+token, through a Claude Console account at <https://platform.claude.com>.
+
+You do not have to pay for this. The free Google Gemini API works for every
+step of Part D, and the lab is designed for it. If you choose the Claude API:
+
+- Add a small amount of credit and **set a monthly spend limit** in the
+  Console before creating a key.
+- Use the smallest model, `claude-haiku-5-5`. At the time of writing it is
+  priced from USD 0.10 per million input tokens and USD 0.50 per million
+  output tokens; check <https://platform.claude.com/docs/en/about-claude/models/overview>
+  for current prices. Part D sends a few hundred short requests, so the cost
+  should be small, but the spend limit is your safety net.
+
 ## If you decide to pay
 
 - **Choose monthly billing** if you only need Claude Code for this course. You
@@ -51,3 +68,5 @@ well you specify, verify and review work, not which tool you used.
 
 - Claude plans and pricing: <https://claude.com/pricing>
 - Claude Code in VS Code (account requirements): <https://code.claude.com/docs/en/vscode-extension>
+- API billing is separate from paid plans: <https://support.claude.com/en/articles/9876003-i-have-a-paid-claude-subscription-pro-max-team-or-enterprise-plans-why-do-i-have-to-pay-separately-to-use-the-claude-api-and-console>
+- Claude models and API prices: <https://platform.claude.com/docs/en/about-claude/models/overview>

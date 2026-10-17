@@ -1,6 +1,7 @@
-# How coding agents work, and the files that control them
+# How coding agents and model APIs work, and the files that control them
 
-Read this guide in **Step 2** of the lab, whichever track you chose. It explains
+Read this guide in **Step 2** of the lab, whichever track you chose, and
+return to Section 6 at the start of Part D. It explains
 the process you will follow and every file you will create. It applies to both
 Claude Code and GitHub Copilot; where they differ, both are shown.
 
@@ -16,13 +17,13 @@ again. It works in a loop:
 ```
  your request
       │
-      ▼
+      v
  ┌─────────────┐   reads files, searches code,   ┌─────────────┐
- │    THINK    │ ─────────────────────────────▶  │     ACT     │
- │ (the model) │ ◀─────────────────────────────  │ (the tools) │
+ │    THINK    │ ─────────────────────────────>  │     ACT     │
+ │ (the model) │ <─────────────────────────────  │ (the tools) │
  └─────────────┘   sees results, test output,    └─────────────┘
       │            error messages
-      ▼
+      v
  a result for YOU to review
 ```
 
@@ -42,9 +43,9 @@ Four facts follow from this, and the whole lab is built around them:
 ## 2. The process: how a proficient developer works with an agent
 
 ```
-Explore ──▶ Specify ──▶ Plan ──▶ Test first ──▶ Implement ──▶ Review ──▶ Commit
+Explore ──> Specify ──> Plan ──> Test first ──> Implement ──> Review ──> Commit
    ▲                                                            │
-   └──────────────────── reject and revise ◀────────────────────┘
+   └──────────────────── reject and revise <────────────────────┘
 ```
 
 | Stage | What you do | What the agent does | Lab step |
@@ -118,6 +119,9 @@ academic work you should not want to hide your AI use.
 | `CLAUDE.md`, `.github/copilot-instructions.md`, `AGENTS.md` | Usually yes | Anyone who can see the repository |
 | `.claude/skills/`, `.github/skills/`, `.claude/agents/`, `.github/agents/` | Usually yes | Anyone who can see the repository |
 | `CLAUDE.local.md`, `.claude/settings.local.json` | No (gitignored in this repository) | Only you, on your machine |
+| `.env` (your model API keys, Part D) | **Never** (gitignored in this repository) | Only you, on your machine |
+| `.env.example` (setting names, no values) | Yes | Anyone who can see the repository |
+| `logs/llm_usage.csv`, `evals/results/` | No (gitignored) | Only you |
 | User-level files: `~/.claude/...`, `~/.copilot/...`, VS Code profile settings | No (outside the repository) | Only you |
 | Your chat conversations | No (not in Git) | You, and the provider under its terms |
 | Commit messages that mention AI, such as `Co-Authored-By:` lines | Yes, if you write them | Anyone who can see the history |
@@ -162,3 +166,61 @@ file you created, whether it should be committed, and why.
 | Stale "facts" | "The current exchange rate is..." | The agent cannot know today's data |
 | Scope creep | Changes files you did not ask about | Review the list of changed files first |
 | Context drift | Forgets rules late in a long chat | Start a new chat per task |
+
+---
+
+## 6. Calling a model from your own code (Part D)
+
+Using a coding agent and calling a model API are different skills. With an
+agent, the model helps **you** write code. With an API, **your program**
+sends text to the model and uses the answer, for example to read a
+customer's message.
+
+```
+ your program ──HTTPS request (key in a header, JSON body)──> model provider
+              <──JSON response (text, token counts)──────────
+```
+
+### The files involved
+
+| File | Purpose | Committed? |
+|------|---------|-----------|
+| `.env` | Your API key and which provider and model to use | **Never** |
+| `.env.example` | The names of the settings, with no values, so others know what to set | Yes |
+| `sales_toolkit/ai/llm_client.py` | The adapter: one `generate()` method for every provider | Yes |
+| `evals/order_cases.jsonl` | Labelled examples used to measure quality | Yes |
+| `evals/holdout_cases.jsonl` | Examples kept back to detect overfitting | Yes (after the final run) |
+| `logs/llm_usage.csv` | Tokens and time for every call, for cost estimates | No |
+
+### Principles that apply to any model, from any provider
+
+1. **Keep the model's job narrow.** Let it do what only a language model can
+   do (understand messy language). Let ordinary code do everything that can
+   be done exactly (prices, totals, business rules).
+2. **Never trust the output.** Validate it exactly as you would validate
+   input typed by a stranger.
+3. **Separate instructions from data.** Rules go in the system prompt; the
+   untrusted text goes in the user message, clearly marked.
+4. **Assume the model can be fooled.** Design so that a fooled model cannot
+   cause harm (prompt injection).
+5. **Measure, do not assume.** Build an evaluation set, change one thing at a
+   time, and analyse failures by cause.
+6. **Test without the network.** Unit tests use a fake client; evaluations
+   use the real model.
+7. **Plan for failure.** Timeouts, retries with backoff, rate limits, and
+   clear messages when something goes wrong.
+8. **Protect secrets and personal data.** Keys in `.env`; only send data the
+   provider's terms and the law allow.
+9. **Know the cost.** Tokens in and out, multiplied by the current price.
+
+### Additional failure patterns for AI features
+
+| Pattern | What it looks like | How to catch it |
+|---------|-------------------|-----------------|
+| Trusting the model with money | Prices or totals taken from the model's reply | Prices only from your own data |
+| Prompt injection | A message that says "ignore your instructions" changes behaviour | Injection cases in the evaluation; design limits |
+| Invalid structure | Prose or code fences instead of JSON | Strip fences, validate, retry once, then flag |
+| Overfitting the prompt | Great on your examples, poor on new ones | A hold-out set run only at the end |
+| Leaked keys | A key in code, a commit, a log or a screenshot | `.env`, `git check-ignore`, history search |
+| Silent cost growth | Long prompts sent thousands of times | Log tokens per call; estimate monthly cost |
+
