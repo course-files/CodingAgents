@@ -1,7 +1,7 @@
 # Project instructions for the coding agent
 
 <!--
-  Copy this file to the repository root as CLAUDE.md (Step 4) and EDIT it.
+  Copy this file to the root of the claude-code folder as CLAUDE.md (Step 4) and EDIT it.
   Keep it short: every line is loaded into every session. Under 50 lines is
   plenty for this project. Delete these comments when you are done.
 -->

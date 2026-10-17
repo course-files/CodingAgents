@@ -1,0 +1,38 @@
+# Project instructions for the coding agent
+
+<!--
+  Step 4: copy this file to .github/copilot-instructions.md and EDIT it.
+  If /init already created an instructions file (for example AGENTS.md),
+  edit that file instead and do NOT keep two files with overlapping rules.
+  Keep it short: every line is sent with every request. Delete these comments.
+-->
+
+## What this project is
+A small invoicing toolkit (`sales_toolkit/`) for a Nairobi retailer.
+Money is in Kenya Shillings (KES).
+
+## Commands
+- Run tests: `python -m pytest -q`
+- Run the CLI: `python -m sales_toolkit invoice data/sample_sales.csv --discount 10`
+
+## Business rules (do not change without asking)
+<!-- Copy the numbered rules from the docstring of sales_toolkit/invoices.py
+     and add any rule you agree with your client later. -->
+1. ...
+
+## Coding rules
+- Use `Decimal` for all money. Never use `float` for money.
+- Round reported amounts with `money()` (ROUND_HALF_UP to 2 decimal places).
+- Every behaviour change needs a test in `tests/`.
+- Never edit or delete an existing test to make it pass. If a test seems
+  wrong, stop and explain why instead.
+- Do not add third-party dependencies without asking first.
+
+## Working style
+- Explain your plan before editing more than one file.
+- Keep changes small; one concern per change.
+- After changing code, run the tests and report the result honestly,
+  including failures.
+
+## Environment notes
+<!-- Example: most of the class uses Windows; keep LF line endings. -->

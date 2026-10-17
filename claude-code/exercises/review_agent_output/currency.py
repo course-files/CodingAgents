@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# EXERCISE FILE: Step 9 of the lab.
+# EXERCISE FILE: Step 10 of the lab.
 #
 # This module is presented as if a coding agent had produced it in response
 # to the request: "Add KES/USD currency conversion to sales_toolkit."

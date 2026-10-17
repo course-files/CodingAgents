@@ -1,5 +1,8 @@
 # Marking rubric
 
+This rubric is identical for the Claude Code and GitHub Copilot tracks. The
+tool a student chose does not affect the mark.
+
 The lab is marked out of **100** for undergraduates. Master's students are
 marked out of **100** on a different weighting that includes the extensions.
 
@@ -13,10 +16,10 @@ more than one whose log claims that everything worked first time.
 |---|-----------|----------|:---------:|:---------------:|
 | C1 | Bug fix done test-first (Step 5) | Failing test committed **before** the fix; hand calculation in log; tests unchanged by the fix | 15 | 10 |
 | C2 | Specification quality (Step 6) | `docs/TASK_SPEC.md` complete, testable, with hand-worked examples and resolved open questions | 15 | 10 |
-| C3 | Plan and review (Steps 7 and 8) | At least one plan change and one rejected or revised edit, each with a reason; small commits | 15 | 10 |
-| C4 | Defect review (Step 9) | Number and accuracy of defects in `docs/REVIEW_currency.md`; comparison with the agent's review | 15 | 10 |
-| C5 | Agent configuration (Steps 4, 10, 11) | Concise, accurate `CLAUDE.md`; improved skill and subagent; evidence they were tested | 15 | 10 |
-| C6 | AI use log and reflection (Steps 3, 12, 13) | Honest, specific entries; verified claims from Step 3; thoughtful answers on safety and disclosure | 15 | 10 |
+| C3 | Plan, review and context (Steps 7 to 9) | Committed plan with at least one requested change; at least one rejected or revised edit with a reason; feature branch and small commits; a sound personal rule for managing context | 15 | 10 |
+| C4 | Defect review (Step 10) | Number and accuracy of defects in `docs/REVIEW_currency.md`; comparison with the agent's review | 15 | 10 |
+| C5 | Agent configuration (Steps 4, 11, 12) | Concise, accurate project instruction file; improved skill and subagent; evidence they were tested | 15 | 10 |
+| C6 | AI use log and reflection (Steps 2, 3, 13, 14) | Honest, specific entries; verified claims from Step 3; thoughtful answers on safety, cost, public versus private files, and disclosure | 15 | 10 |
 | C7 | Oral check (in class, 5 minutes) | Explains a randomly chosen part of their submission **without** the agent | 10 | 10 |
 | M1–M4 | Master's extensions | See below | – | 30 |
 | | **Total** | | **100** | **100** |

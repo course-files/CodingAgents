@@ -4,7 +4,8 @@ description: Write pytest tests for a function in sales_toolkit, covering normal
 ---
 
 <!--
-  Copy to .claude/skills/add-tests/SKILL.md (Step 10) and improve it.
+  Step 11: copy to .github/skills/add-tests/SKILL.md and improve it.
+  The folder name must match `name` (lowercase letters, numbers, hyphens).
   The description above decides WHEN the agent loads this skill, so make
   it specific. The body below decides HOW the agent does the work.
 -->

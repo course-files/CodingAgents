@@ -1,0 +1,9 @@
+[project]
+name = "sales_toolkit"
+version = "0.1.0"
+description = "Practice codebase for the Coding Agents lab"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

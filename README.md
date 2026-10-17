@@ -1,51 +1,53 @@
 # CodingAgents
 
 A standalone, hands-on lab that teaches undergraduate and master's students
-to **code correctly with AI coding agents**: to specify, plan, delegate,
-verify, review and own the work, rather than accept whatever an agent
-produces.
+to **code correctly and responsibly with AI coding agents**: to specify, plan,
+delegate, verify, review and own the work, rather than accept whatever an
+agent produces.
 
-The lab uses [Claude Code](https://code.claude.com/docs/en/vscode-extension)
-in VS Code and a small Python invoicing codebase (`sales_toolkit`) with a
-real bug, a vague feature request, and an "agent-written" file full of
-plausible defects.
+## Choose your track
 
-## Start here
+Both tracks use the same codebase, the same exercises and the same marking
+rubric. Pick the one that matches the tool you can use.
 
-👉 **[LAB_INSTRUCTIONS.md](LAB_INSTRUCTIONS.md)** (step-by-step)
-👉 **[RUBRIC.md](RUBRIC.md)** (how the work is marked)
+| | [GitHub Copilot track](github-copilot/) | [Claude Code track](claude-code/) |
+|---|---|---|
+| **Cost to you** | Free for verified students (GitHub Student Developer Pack) | Paid: from USD 20 per month (see [costs](claude-code/COSTS_AND_ACCESS.md)) |
+| **Usage** | Limited monthly AI credits; model chosen automatically | Plan usage limits; you can choose the model |
+| **Who should choose it** | **Most students** | Students who already have, or choose to buy, Claude access |
+| **Start here** | [github-copilot/LAB_INSTRUCTIONS.md](github-copilot/LAB_INSTRUCTIONS.md) | [claude-code/LAB_INSTRUCTIONS.md](claude-code/LAB_INSTRUCTIONS.md) |
 
-## What students practise
+**Not sure? Choose the GitHub Copilot track.** The tool you choose does not
+affect your mark.
+
+Before you begin, read **[AGENT_FILES_GUIDE.md](AGENT_FILES_GUIDE.md)**. It
+explains how coding agents work, the workflow you will follow, the key
+configuration files for both tools, and whether those files are public.
+
+## What you will practise
 
 | Part | Steps | Skills |
 |------|-------|--------|
-| A. Foundations | 0–2 | Setup, safe permission mode, how an agent works |
-| B. Core workflow | 3–9 | Explore, project memory (`CLAUDE.md`), test-first bug fixing, specification, planning, change review, catching agent errors |
-| C. Making the agent yours | 10–13 | Skills (`SKILL.md`), a read-only reviewer subagent, safety, data protection, disclosure |
+| A. Foundations | 0–2 | Setup, safe permissions, how an agent works, the key files |
+| B. Core workflow | 3–10 | Exploring and verifying, project instructions, test-first bug fixing, specification, planning, change review, context management, catching agent errors |
+| C. Making the agent yours | 11–14 | Skills (`SKILL.md`), a read-only reviewer subagent, safety, data protection, cost, public versus private files, disclosure |
 | Master's extensions | M1–M4 | Specification ambiguity, a controlled comparison, skill evaluation, critical essay |
-
-## Requirements
-
-- Python 3.10 or newer, Git, VS Code
-- A Claude account that includes Claude Code (a paid Claude subscription or a Claude Console account)
-
-Check your machine with:
-
-```bash
-python -m pip install -r requirements.txt
-python check_setup.py
-python -m pytest -q
-```
 
 ## Repository layout
 
 ```
-sales_toolkit/                  practice codebase
-tests/                          starter tests (all pass; that does not mean the code is correct)
-data/sample_sales.csv           sample data
-exercises/review_agent_output/  agent-style code to review in Step 9 (do not use it)
-templates/                      CLAUDE.md, SKILL.md, subagent, specification, log and checklist templates
+AGENT_FILES_GUIDE.md   how agents work and the files that control them (both tracks)
+github-copilot/        complete lab for GitHub Copilot (free for students)
+claude-code/           complete lab for Claude Code (paid)
 ```
+
+Each track folder is self-contained: open **only that folder** in VS Code.
+
+## Requirements
+
+- Python 3.10 or newer, Git, VS Code
+- One of: GitHub Copilot (free with the GitHub Student Developer Pack), or a
+  Claude account that includes Claude Code
 
 ## Licence
 

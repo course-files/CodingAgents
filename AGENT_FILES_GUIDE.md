@@ -1,0 +1,164 @@
+# How coding agents work, and the files that control them
+
+Read this guide in **Step 2** of the lab, whichever track you chose. It explains
+the process you will follow and every file you will create. It applies to both
+Claude Code and GitHub Copilot; where they differ, both are shown.
+
+---
+
+## 1. What a coding agent is
+
+A **coding agent** is a language model connected to tools. Unlike a chatbot
+that only suggests code, an agent can read your files, search the project,
+edit files, run commands such as your tests, look at the results, and try
+again. It works in a loop:
+
+```
+ your request
+      │
+      ▼
+ ┌─────────────┐   reads files, searches code,   ┌─────────────┐
+ │    THINK    │ ─────────────────────────────▶  │     ACT     │
+ │ (the model) │ ◀─────────────────────────────  │ (the tools) │
+ └─────────────┘   sees results, test output,    └─────────────┘
+      │            error messages
+      ▼
+ a result for YOU to review
+```
+
+Four facts follow from this, and the whole lab is built around them:
+
+1. **It is fluent, not infallible.** It produces the most plausible next step.
+   Its mistakes look exactly as confident as its successes.
+2. **It only knows what is in its context window**, the text it can see right
+   now: your request, the files it has read, tool output, and its instruction
+   files. It does not remember yesterday's chat unless something is written down.
+3. **It optimises for what you ask.** "Make the tests pass" can be satisfied by
+   deleting a test. Say precisely what you want and what must not change.
+4. **You are accountable.** Whoever typed the code, the person who commits it owns it.
+
+---
+
+## 2. The process: how a proficient developer works with an agent
+
+```
+Explore ──▶ Specify ──▶ Plan ──▶ Test first ──▶ Implement ──▶ Review ──▶ Commit
+   ▲                                                            │
+   └──────────────────── reject and revise ◀────────────────────┘
+```
+
+| Stage | What you do | What the agent does | Lab step |
+|-------|-------------|---------------------|----------|
+| Explore | Ask questions; verify the answers in the code | Reads and summarises the codebase | 3 |
+| Configure | Write the project instruction file | Follows it in every session | 4 |
+| Specify | Decide the behaviour, edge cases and acceptance criteria | Critiques the specification for gaps (optional) | 6 |
+| Plan | Approve or correct the plan | Proposes files to change and steps | 7 |
+| Test first | Check that tests encode the specification | Writes tests that fail for the right reason | 5, 8 |
+| Implement | Review every change; reject what is wrong | Edits code until the tests pass | 8 |
+| Manage context | Start fresh chats; point at the right files | Works from what is in its context | 9 |
+| Review | Use a checklist and a second, independent reviewer | Acts as a read-only reviewer when asked | 10, 12 |
+| Commit | Write a meaningful commit and a log entry | Nothing: this is your decision | every step |
+
+The six skills you are building: **specify, plan, delegate, verify, review, own.**
+
+---
+
+## 3. The key files
+
+Agents are configured with plain Markdown files kept in the project. There are
+three kinds you must understand. Think of them as layers.
+
+| Layer | Purpose | When it is loaded | Analogy |
+|-------|---------|-------------------|---------|
+| **Project instructions** | Standing rules and facts about the project | At the start of **every** session | The briefing every new team member reads |
+| **Skill** (`SKILL.md`) | A detailed procedure for one kind of task | **Only when relevant**, or when you type `/skill-name` | A standard operating procedure in a binder |
+| **Custom agent / subagent** | A specialist with its own instructions and limited tools | When you, or the main agent, delegate to it | A colleague you ask for a second opinion |
+
+### Where each file lives
+
+| Purpose | Claude Code | GitHub Copilot in VS Code |
+|---------|-------------|---------------------------|
+| Project instructions | `CLAUDE.md` in the project root | `.github/copilot-instructions.md` (Copilot also reads `AGENTS.md` and `CLAUDE.md`) |
+| Personal, uncommitted instructions | `CLAUDE.local.md` (gitignored) | Personal instructions in your user profile or `~/.copilot/` |
+| Skill | `.claude/skills/<name>/SKILL.md` | `.github/skills/<name>/SKILL.md` (Copilot also reads `.claude/skills/` and `.agents/skills/`) |
+| Custom agent / subagent | `.claude/agents/<name>.md` | `.github/agents/<name>.agent.md` (Copilot also reads Claude-format files in `.claude/agents/`) |
+| Cross-tool instructions | `AGENTS.md` (read if no `CLAUDE.md`, or if imported) | `AGENTS.md` |
+
+Because the formats overlap, what you learn in one tool transfers to the other.
+`AGENTS.md` and `SKILL.md` are open conventions used by several agents.
+
+### What makes these files good
+
+- **Short and specific beats long and vague.** Every line of the project
+  instruction file is read in every session. "Use `Decimal` for money" is
+  useful; "write clean code" is noise.
+- **Rules the agent cannot discover by itself.** It can read your code; it
+  cannot read your client's mind. Business rules, conventions and "never do
+  this" rules belong here.
+- **A skill's `description` decides when it is used.** Write it as "what this
+  does, and when to use it".
+- **Least privilege for subagents.** A reviewer only needs to read, so give it
+  read and search tools only.
+- **Treat them as code.** Review changes to them, commit them, and improve them
+  when the agent makes the same mistake twice.
+
+---
+
+## 4. Are these files public? Can they be private?
+
+**Short answer:** these files are ordinary files in your repository. If you
+commit them to a **public** repository, anyone can see them, and they make it
+obvious that you use a coding agent. They can be kept private, but for
+academic work you should not want to hide your AI use.
+
+### What is visible, and what is not
+
+| Item | Committed? | Who can see it |
+|------|-----------|----------------|
+| `CLAUDE.md`, `.github/copilot-instructions.md`, `AGENTS.md` | Usually yes | Anyone who can see the repository |
+| `.claude/skills/`, `.github/skills/`, `.claude/agents/`, `.github/agents/` | Usually yes | Anyone who can see the repository |
+| `CLAUDE.local.md`, `.claude/settings.local.json` | No (gitignored in this repository) | Only you, on your machine |
+| User-level files: `~/.claude/...`, `~/.copilot/...`, VS Code profile settings | No (outside the repository) | Only you |
+| Your chat conversations | No (not in Git) | You, and the provider under its terms |
+| Commit messages that mention AI, such as `Co-Authored-By:` lines | Yes, if you write them | Anyone who can see the history |
+
+### Ways to keep agent configuration private
+
+1. **Make the repository private.** GitHub allows free private repositories.
+   Collaborators you invite can still see everything.
+2. **Use personal, uncommitted files.** Put personal preferences in
+   `CLAUDE.local.md` or your user-level folder instead of the project.
+3. **Exclude files locally** by listing them in `.git/info/exclude` (works like
+   `.gitignore` but is never committed).
+4. **Never commit secrets** in any of these files. A private repository is not a
+   safe place for passwords or API keys either.
+
+### Why, in this lab, you should commit them
+
+- **They are part of your submission.** Your instruction file, skill and
+  subagent are assessed.
+- **Disclosure is part of academic integrity.** Your AI use log and these
+  files show honestly how you worked.
+- **It is normal professional practice.** Teams commit these files so that
+  everyone, and every agent, follows the same rules. Using an agent openly and
+  well is a strength to show employers, not something to hide.
+
+What you **must** keep private: secrets, personal data, and anything your
+lecturer has not authorised you to share. Step 13 asks you to decide, for each
+file you created, whether it should be committed, and why.
+
+---
+
+## 5. Common failure patterns to watch for
+
+| Pattern | What it looks like | How to catch it |
+|---------|-------------------|-----------------|
+| Plausible but wrong | Correct-looking code that breaks a business rule | Work one example by hand |
+| Summarising instead of reading | Repeats the docstring, misses what the code does | Ask for line numbers; check them |
+| Gaming the tests | Edits, weakens or deletes a test to make it pass | Rule in instructions; review test diffs |
+| Tautological tests | Expected value computed by the code under test | Expected values come from the specification |
+| Invented APIs or packages | Imports something that does not exist | Check every new import before installing |
+| Silent failure | `except Exception: return 0` | Search diffs for broad `except` |
+| Stale "facts" | "The current exchange rate is..." | The agent cannot know today's data |
+| Scope creep | Changes files you did not ask about | Review the list of changed files first |
+| Context drift | Forgets rules late in a long chat | Start a new chat per task |
