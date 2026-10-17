@@ -6,6 +6,7 @@ Works on Windows, Linux and macOS (no shell script, so no line-ending issues).
 
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 import sys
@@ -43,13 +44,26 @@ def main() -> int:
         else:
             print(f"[WARN] {name} was not found on PATH (optional; see Step 1)")
 
-    try:
-        import pytest  # noqa: F401
+    # Packages from requirements.txt. requests and python-dotenv are only
+    # needed from Part D (Step 15) onwards.
+    for module, label in [("pytest", "pytest"), ("requests", "requests"), ("dotenv", "python-dotenv")]:
+        try:
+            imported = __import__(module)
+            print(f"[ OK ] {label} {getattr(imported, '__version__', '')}".rstrip())
+        except ImportError:
+            ok = False
+            print(f"[FAIL] {label} is not installed. Run: python -m pip install -r requirements.txt")
 
-        print(f"[ OK ] pytest {pytest.__version__}")
-    except ImportError:
-        ok = False
-        print("[FAIL] pytest is not installed. Run: python -m pip install -r requirements.txt")
+    # Part D: is there a .env file, and is Git ignoring it?
+    if os.path.exists(".env"):
+        ignored = subprocess.run(["git", "check-ignore", "-q", ".env"]).returncode == 0
+        if ignored:
+            print("[ OK ] .env exists and Git is ignoring it")
+        else:
+            ok = False
+            print("[FAIL] .env exists but Git is NOT ignoring it. Do not commit. Ask your lecturer.")
+    else:
+        print("[INFO] No .env file yet. You create it in Step 16.")
 
     print("\nAll required tools are present." if ok else "\nFix the FAIL items before Step 1.")
     return 0 if ok else 1

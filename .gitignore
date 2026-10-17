@@ -222,3 +222,7 @@ __marimo__/
 # Coding Agents lab: personal agent files that must not be committed
 **/CLAUDE.local.md
 **/.claude/settings.local.json
+
+# Coding Agents lab, Part D: local logs and evaluation output
+**/logs/
+**/evals/results/
