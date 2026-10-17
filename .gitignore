@@ -226,3 +226,5 @@ __marimo__/
 # Coding Agents lab, Part D: local logs and evaluation output
 **/logs/
 **/evals/results/
+
+lab_submission_ANSWERS/
