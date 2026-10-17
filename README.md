@@ -1,7 +1,16 @@
-# CodingAgents
+# Coding Agents
 
-A hands-on lab that teaches undergraduate and master's students the two
-skills employers now expect of every new software engineer:
+| Key             | Value                                                                                                                                                                                                                                                                           |
+|:----------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Course Code** | *Various*                                                                                                                                                                                                                                                                        |
+| **Course Name** | *Various*                                                                                                                                                                                                                                    |
+| **Semester**    | September to November 2026                                                                                                                                                                                                                                                              |
+| **Lecturer**    | Allan Omondi                                                                                                                                                                                                                                                                    |
+| **Contact**     | aomondi@strathmore.edu                                                                                                                                                                                                                                                          |
+| **Note**        | The lab is intended for educational purposes only.<br/>Recommended citation: [BibTex](https://raw.githubusercontent.com/course-files/CodingAgents/refs/heads/main/RecommendedCitation.bib) |
+
+A hands-on lab that teaches students the two skills employers now expect of
+every new software engineer:
 
 1. **Writing software with an AI coding agent**: specifying, planning,
    delegating, verifying, reviewing and owning the work, rather than
@@ -10,15 +19,16 @@ skills employers now expect of every new software engineer:
    keeping the model's role narrow, validating what it returns, defending
    against prompt injection, and measuring quality with a proper evaluation.
 
-The lab is self-contained and self-explanatory, so that students can work
-through it alone and return to it after they graduate.
+The lab is self-contained and self-explanatory, so that you can work
+through it alone and return to it even after you graduate (if your GitHub
+Student Developer Pack will still be active).
 
-## Choose your track
+## Choose Your Track
 
 Both tracks use the same codebase, the same exercises and the same marking
 rubric. Pick the one that matches the coding agent you can use.
 
-| | [GitHub Copilot track](github-copilot/) | [Claude Code track](claude-code/) |
+| | [GitHub Copilot Track](github-copilot/) | [Claude Code Track](claude-code/) |
 |---|---|---|
 | **Coding agent** | GitHub Copilot in VS Code | Claude Code in VS Code |
 | **Cost to you** | Free for verified students (GitHub Student Developer Pack) | Paid: from USD 20 per month (see [costs](claude-code/COSTS_AND_ACCESS.md)) |
@@ -38,7 +48,7 @@ Before you begin, read **[AGENT_FILES_GUIDE.md](AGENT_FILES_GUIDE.md)**. It
 explains how coding agents work, the workflow you will follow, the key
 configuration files for both tools, and whether those files are public.
 
-## What you will practise
+## What you will Practice
 
 | Part | Steps | Skills |
 |------|-------|--------|
@@ -51,9 +61,13 @@ configuration files for both tools, and whether those files are public.
 Plan for about five lab sessions. The instructions mark safe stopping points
 and explain how to pause and resume.
 
-## Repository layout
+## System Architecture
 
-```
+![Coding Agent Diagram](./assets/images/coding_agents_architecture.jpg)
+
+## Repository Structure
+
+```text
 AGENT_FILES_GUIDE.md   how agents and model APIs work, and the files that control them
 github-copilot/        complete lab for GitHub Copilot (free for students)
 claude-code/           complete lab for Claude Code (paid)
@@ -68,7 +82,3 @@ Each track folder is self-contained: open **only that folder** in VS Code.
   Pack) or Claude Code (a paid Claude plan)
 - For Part D: a free Google AI Studio account (age 18 and over), or a Claude
   Console account with credit, or the offline mode
-
-## Licence
-
-GNU General Public License v3.0. See [LICENSE](LICENSE).

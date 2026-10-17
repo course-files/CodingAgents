@@ -9,41 +9,80 @@ Claude Code and GitHub Copilot; where they differ, both are shown.
 
 ## 1. What a coding agent is
 
-A **coding agent** is a language model connected to tools. Unlike a chatbot
-that only suggests code, an agent can read your files, search the project,
-edit files, run commands such as your tests, look at the results, and try
-again. It works in a loop:
+**A coding agent is a Large Language Model (LLM) connected to tools by agent
+software (the harness), such as Claude Code or GitHub Copilot. The LLM reads
+your request and decides what to do next. When it needs to read a file, edit
+code or run a command, it asks the harness to use the right tool. The harness
+checks your permission settings, runs the tool, and returns the result to the
+LLM. This repeats until the task is done.**
 
-```
- your request
-      │
-      v
- ┌─────────────┐   reads files, searches code,   ┌─────────────┐
- │    THINK    │ ─────────────────────────────>  │     ACT     │
- │ (the model) │ <─────────────────────────────  │ (the tools) │
- └─────────────┘   sees results, test output,    └─────────────┘
-      │            error messages
-      v
- a result for YOU to review
-```
+Unlike a chatbot that only suggests code, an agent can read your files, search
+the project, edit files, run commands such as your tests, look at the results,
+and try again. **It works in a loop.**
+
+![Coding Agent Diagram](./assets/images/coding_agents_architecture.jpg)
+
+An LLM on its own can only read text and write text. It cannot open a file,
+run a test or change your code. **The harness is the program wrapped around
+the LLM that gives it those abilities, safely.** Claude Code and GitHub
+Copilot are examples of harnesses. The LLM inside them is the “brain”; the
+harness is everything else.
+
+The harness has four jobs:
+
+1. **It sends your request to the LLM**, together with the project instruction
+   file (`CLAUDE.md` or `copilot-instructions.md`) and a list of the tools that
+   are available.
+2. **It receives the LLM's tool requests.** When the LLM needs a file, it does
+   not open the file itself. It replies with a structured request, such as
+   “use the read tool in `invoices.py`”.
+3. **It checks your permissions, then runs the tool.** This is where the
+   harness stops and asks you to approve an edit or a command if it is running
+   in "Manual Mode". If you refuse, the tool never runs.
+4. **It returns the result to the LLM** (the file contents, the test output, the
+   error message, etc.). The LLM reads it and decides the next step. **The loop
+   repeats until the LLM reports that it has finished.**
+
+**Analogy:** Think of a senior consultant working remotely who cannot visit
+your office. The consultant (the LLM) phones your office assistant (the
+harness) and says, "Please read me the invoice file." The assistant checks
+whether the consultant is allowed to see it, fetches it, and reads it out. Then
+the consultant says, "Now change line 92." The assistant asks you for approval
+first, makes the change, and confirms it. The consultant does the thinking. The
+assistant does the actions and enforces your rules.
+
+The **Model Context Protocol (MCP)** is an open standard for connecting a
+coding agent to outside systems. Examples include a database (to inspect
+schemas and run queries), GitHub (to read issues and open pull requests), a
+project tracker such as Jira (to read a ticket's requirements), documentation
+in Confluence or Google Drive, error monitoring such as Sentry (to diagnose
+bugs), and a browser automation tool such as Playwright (to test a web
+application). Each MCP server adds its own tools to the agent.
+
+Each MCP connection gives the agent real access to a real system, so apply a
+least-privilege rule: only grant the minimum permissions necessary. Example:
+Connect a read-only database user rather than an administrator, and a test
+environment rather than production. Text the agent reads from these systems,
+such as an issue or a Slack message, can also contain prompt injection, which
+links to later steps in this lab.
 
 Four facts follow from this, and the whole lab is built around them:
 
-1. **It is fluent, not infallible.** It produces the most plausible next step.
-   Its mistakes look exactly as confident as its successes.
-2. **It only knows what is in its context window**, the text it can see right
+1. **The agent is fluent, not infallible (error-free).** It produces the most
+   plausible next step. Its mistakes look exactly as confident as its successes.
+2. **The agent only knows what is in its context window**, the text it can see right
    now: your request, the files it has read, tool output, and its instruction
    files. It does not remember yesterday's chat unless something is written down.
-3. **It optimises for what you ask.** "Make the tests pass" can be satisfied by
+3. **The agent optimizes for what you ask.** "Make the tests pass" can be satisfied by
    deleting a test. Say precisely what you want and what must not change.
-4. **You are accountable.** Whoever typed the code, the person who commits it owns it.
+4. **YOU ARE ACCOUNTABLE.** Whoever typed the code, the person who commits it owns it.
 
 ---
 
-## 2. The process: how a proficient developer works with an agent
+## 2. The process: How a proficient developer works with an agent
 
 ```
-Explore ──> Specify ──> Plan ──> Test first ──> Implement ──> Review ──> Commit
+Explore ──> Specify ──> Plan ──> Test First ──> Implement ──> Review ──> Commit
    ▲                                                            │
    └──────────────────── reject and revise <────────────────────┘
 ```
@@ -58,7 +97,7 @@ Explore ──> Specify ──> Plan ──> Test first ──> Implement ──
 | Implement | Review every change; reject what is wrong | Edits code until the tests pass | 8 |
 | Manage context | Start fresh chats; point at the right files | Works from what is in its context | 9 |
 | Review | Use a checklist and a second, independent reviewer | Acts as a read-only reviewer when asked | 10, 12 |
-| Commit | Write a meaningful commit and a log entry | Nothing: this is your decision | every step |
+| Commit | Write a meaningful commit and a log entry | **Nothing: this is YOUR decision** | every step |
 
 The six skills you are building: **specify, plan, delegate, verify, review, own.**
 
@@ -110,7 +149,8 @@ Because the formats overlap, what you learn in one tool transfers to the other.
 **Short answer:** these files are ordinary files in your repository. If you
 commit them to a **public** repository, anyone can see them, and they make it
 obvious that you use a coding agent. They can be kept private, but for
-academic work you should not want to hide your AI use.
+academic work you should let it be known that you used a coding agent. Similar
+to the requirement that you should cite sources in academic work.
 
 ### What is visible, and what is not
 
@@ -144,8 +184,8 @@ academic work you should not want to hide your AI use.
 - **Disclosure is part of academic integrity.** Your AI use log and these
   files show honestly how you worked.
 - **It is normal professional practice.** Teams commit these files so that
-  everyone, and every agent, follows the same rules. Using an agent openly and
-  well is a strength to show employers, not something to hide.
+  everyone, and every agent, follows the same rules. **Using an agent openly and
+  professionally is a strength to show employers, *NOT* something to hide.**
 
 What you **must** keep private: secrets, personal data, and anything your
 lecturer has not authorised you to share. Step 13 asks you to decide, for each
@@ -176,7 +216,7 @@ agent, the model helps **you** write code. With an API, **your program**
 sends text to the model and uses the answer, for example to read a
 customer's message.
 
-```
+```text
  your program ──HTTPS request (key in a header, JSON body)──> model provider
               <──JSON response (text, token counts)──────────
 ```
